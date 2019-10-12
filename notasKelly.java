@@ -6,128 +6,105 @@
 package ejer_notas_kelly;
 
 import java.util.Scanner;
+//import javax.swing.JOptionPane;
+
+//Dada las calificaciones de n estudiantes, obtener:
+//Calificacion mayor y menor
+//Dado un nota cualquiera decir cuantos estudiantes obutvieron esa nota
+//Cuantas veces se obtuvo cada nota
+//Agregre dos datos y ubiquelos en el lugar que les corresponda, despues de ordenar el vector
+//Elimine todos las notas que son inferiores al promedio
 
 /**
  *
- * @author KELLY
+ * @author Felix Castro
  */
 public class notasKelly {
-
     public static void main(String[] args) {
-     
-    int n,e = 0, cant=0;    
-    Scanner leer = new Scanner(System.in);
-     System.out.println("ingrese la cantidad de alumnos");
-     n= leer.nextInt();
-     
-    System.out.print("------------------------\n");
-    
-    double[] nota = new double[n+2]; // aqui se declara el vector
-    
-    for (int j = 0; j < n; j++) { // aqui se llena el vector
-        e=e+1;
-        System.out.print("ingrese la Nota del estudiante "+ e +"\n");
-        nota[j] = leer.nextDouble();
+        //ingresamo datos por teclado en consola
+        Scanner entrada = new Scanner(System.in);
         
-    }
-    
-    
-    
-    for (int x = 0; x < nota.length; x++) { // aqui se ordena el vector
-        for (int i = 0; i < nota.length-x-1; i++) {
-            if(nota[i] < nota[i+1]){
-                double tmp = nota[i+1];
-                nota[i+1] = nota[i];
-                nota[i] = tmp;
-            }
-        }
-      }
-    
-    System.out.print("------------------------\n");
-    
-    e=0;
-     System.out.print("Posición de las notas de mayor a menor " +"\n");
-    for (int i=0; i<n; i++) { // aqui mostramos las notas de mayor a menor  
-       e = n-i;
-       System.out.print("Posición "+ e +": "+ nota[i]+"\n");
-    }
-    
-    System.out.print("------------------------\n");
+        //Definimos variables
+        double [] califiEstu;
+        int cantEstu, posi_num=0, h=0;
         
-    System.out.print("ingrese la Nota a consultar " +"\n");
-    double notab = leer.nextDouble();    
-     for (int i=0; i < n; i++) { // aqui buscamos la nota   
-        if(nota[i] == notab){
-                cant = cant + 1;
+        //solicitamos la cantidad de estudiante
+        System.out.println("Ingrese la cantidad de estudiante");
+        cantEstu = entrada.nextInt();
+        
+        //vector
+        califiEstu = new double[cantEstu];
+        
+        //ingreamos la notas
+        System.out.println("Registro de notas de cada estudiante en orden");
+        for (int i = 0; i < cantEstu/2; i++) {
+            System.out.println("Ingrese la nota del estudiante "+(i+1));
+            califiEstu[i] = entrada.nextDouble();
+        }
+        
+        //probar vector imprimiendolo
+        System.out.println("Notas de los estudiantes por orden ingresado");
+        for (int i = 0; i < cantEstu; i++) {
+            System.out.println("El estudiante "+ (i+1)+ ""
+                    + " obtuvo una nota de "+ califiEstu[i]);
+        }
+        
+        //metodo insercion
+        for (int i = 1; i < cantEstu; i++) {
+            //buscamos la posicion correecta del elemento destino
+            int j=i;
+            double aux = califiEstu[i];
+            //localizamos el punto de insercion buscando hacia abajo
+            while (j>0 && aux<califiEstu[j-1]) {                
+                califiEstu[j] = califiEstu[j-1];
+                j--;
             }
-     }
-     System.out.print("La cantidad de estudiantes con la nota "+ notab +": "+ cant +"\n");
-     
-     
-     System.out.print("------------------------\n");
-     
-   // consultamos la cantidad de veces que se repite una nota 
-    int cantidad = 0;
-    double aux = 0;
-    for(int j=0;j<nota.length;j++){
-     if(aux != nota[j]){   
-      for(int i=0;i<nota.length-1;i++){
-            if(nota[j]==nota[i+1]){
-                cantidad = cantidad + 1;  
-            }else{
-                cantidad= 1;
+            califiEstu[j] = aux;
+        }       
+        
+        
+        //ingresamos una nueva notas
+        System.out.println("Ingrese otra nota");
+        double nota = entrada.nextDouble();
+        
+        //buscar la posicion donde va el numero
+        while (califiEstu[h]<nota && h<cantEstu/2) {            
+            posi_num++;
+            h++;
+        }
+        
+        //corremos una posicion
+        for (int i = (cantEstu/2)-1; i >= posi_num; i--) {
+            califiEstu[i+1] = califiEstu[i];
+        }
+        
+        //insertamos el numero
+        califiEstu[posi_num] = nota;
+        
+        //mayor
+        double mayor = califiEstu[0];
+        
+        //menor
+        double menor = califiEstu[0];
+        
+        //prueba imprimir notas
+        System.out.println("Notas de los estudiantes por nota ascendente");
+        for (int i = 0; i < cantEstu; i++) {
+            System.out.println("la nota del estudiante "+(i+1)+" obtuvo "
+                    + "una nota de "+ califiEstu[i]);
+            
+            //validar numero mayor y menor
+            if (califiEstu[i]>mayor) {
+                mayor = califiEstu[i];
+            }
+            
+            if (califiEstu[i]<menor) {
+                menor = califiEstu[i];
             }
         }
-        System.out.println("La nota " + nota[j] + " se repite "+cantidad+" veces");
-      }
-        aux= nota[j];
-       
+        
+        //mostramos numero mayor y menor
+        System.out.println("La nota mayor es "+ mayor);
+        System.out.println("La nota menor es "+ menor);
     }
-     
-       
-    
-     System.out.print("------------------------\n");
-    
-    // aqui insertamos la nueva nota
-        for (int ab = 1; ab < 3; ab++) {
-            System.out.print("ingrese la Nota nueva " + "\n");
-            double notan = leer.nextDouble();
-            int ac = 0;
-            int posicion = 0;
-            while (notan > nota[ac] && ac < n) {
-                posicion = posicion + 1;
-                ac = ac + 1;
-            }
-            for (int i = n; i >= posicion; i--) {
-                nota[i] = nota[i - 1];
-            }
-            nota[posicion] = notan;
-            n = n + 1;
-        }
-    
-     System.out.print("------------------------\n");
-    
-     // aqui buscamos la nota menor al promedio y se elimina   
-    double prom, suma=0; 
-    for (int i=0; i < nota.length; i++) { 
-        suma = suma + nota[i];
-     }    
-    prom = suma / nota.length;
-    System.out.print("El promedio de las notas es :" + prom +"\n");
-    int posicioneliminar = -1;
-    for (int i=0; i < nota.length; i++) {
-        if(nota[i] < prom){
-               posicioneliminar = i;
-               nota[i] = 0;
-               if(posicioneliminar >= 0){
-                    System.out.print("El dato en la posicion " + posicioneliminar +" se eliminó.\n");
-                }else{
-                    System.out.print("No se encontro el dato. " +"\n");
-                }
-            }
-     }    
-    
-    
-    }
-   
 }
